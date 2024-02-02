@@ -324,6 +324,9 @@ def export_config(config_filename):
                 config_filename = response.lower()
                 continue  # Continue to the beginning of the loop to validate new filename
         else:
+            # creating the settings directory if it doesn't exist
+            print("\nCreating settings/settings.yaml since it doesn't exist")
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
             break  # Exit the loop if the filename is unique
 
     try:
