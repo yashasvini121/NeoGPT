@@ -166,7 +166,7 @@ def main():
         "--max-tokens",
         type=int,
         default=8192,
-        help="The maximum number of tokens to generate.",   # todo-ys: Check if it has any min value
+        help="The maximum number of tokens to generate.",
     )
 
     parser.add_argument(
@@ -279,8 +279,10 @@ def main():
             LOGGING=logging,
         )
 
-    if args.temperature < 0:
-        logging.warning("Temperature is invalid. So no change in the temperature, i.e. 1.0 is used.")
+    if args.temperature < 0 and args.temperature < 101:
+        logging.warning("Temperature is invalid. So no change in the temperature, so 1.0 is used.")
+    elif args.model.split("/", 1)[0] == "openai" and args.temperature > 1 :
+        logging.warning("Temperature is invalid. It should be between 0 and 1.0, so 1.0 is used.")
     else:
         os.environ["TEMPERATURE"] = str(args.temperature)
     
