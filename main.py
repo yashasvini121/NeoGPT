@@ -155,6 +155,27 @@ def main():
         help="Shell mode. Allows to run commands",
     )
 
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=1.0,
+        help="The temperature influences the randomness of generated text. Must be strictly positive.",
+    )
+
+    parser.add_argument(
+        "--max-tokens",
+        type=int,
+        default=8192,
+        help="The maximum number of tokens to generate.",   # todo-ys: Check if it has any min value
+    )
+
+    parser.add_argument(
+        "--context-window",
+        type=int,
+        default=512,
+        help="Context windows determine the number of tokens considered for context."
+    )
+
     args = parser.parse_args()
 
     # Check if --import switch is received
@@ -257,6 +278,22 @@ def main():
             show_stats=args.stats,
             LOGGING=logging,
         )
+
+    if args.temperature < 0:
+        logging.warning("Temperature is invalid. So no change in the temperature, i.e. 1.0 is used.")
+    else:
+        os.environ["TEMPERATURE"] = str(args.temperature)
+    
+    if args.max_tokens < 0:
+        logging.warning("Max tokens is invalid. So no change in the max tokens, i.e. 8192 is used.")
+    else:
+        os.environ["MAX_TOKEN_LENGTH"] = str(args.max_tokens)
+    
+    if args.context_window < 0:
+        logging.warning("Context window is invalid. So no change in the context window, i.e. 512 is used.")
+    else:
+        os.environ["CONTEXT_WINDOW"] = str(args.context_window)
+
     # Supress Langchain Deprecation Warnings
 
     warnings.filterwarnings("ignore", category=LangChainDeprecationWarning)
