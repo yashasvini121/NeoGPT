@@ -281,7 +281,7 @@ def main():
 
     if args.temperature < 0 and args.temperature < 101:
         logging.warning("Temperature is invalid. So no change in the temperature, so 1.0 is used.")
-    elif args.model.split("/", 1)[0] == "openai" and args.temperature > 1 :
+    elif (args.model.split("/", 1)[0] in ["openai", "lmstudio"]) and (args.temperature > 1) :
         logging.warning("Temperature is invalid. It should be between 0 and 1.0, so 1.0 is used.")
     else:
         os.environ["TEMPERATURE"] = str(args.temperature)
